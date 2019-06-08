@@ -1,11 +1,16 @@
 package com.example.bjornsod.interview;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,27 +20,20 @@ import android.widget.Toast;
 
 public class EntranceFragment extends Fragment {
 
-    private TextView registerlink;
-    private Button buttonLogin;
+    Button loginButton;
+    TextView RegisterLink;
 
-
-    private TextView email_input,password_input;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_entrance, container, false);
 
+        loginButton = (Button) view.findViewById(R.id.button_login);
+        RegisterLink = (TextView) view.findViewById(R.id.register_link);
 
-        email_input = (TextView)view.findViewById(R.id.email_login);
-        password_input = (TextView)view.findViewById(R.id.password_login);
-
-        registerlink = (TextView)view.findViewById(R.id.register_link);
-        registerlink.setOnClickListener(btnListener);
-
-        buttonLogin = (Button) view.findViewById(R.id.button_login);
-        buttonLogin.setOnClickListener(buttonLoginListener);
-
+        loginButton.setOnClickListener(buttonLoginListener);
+        RegisterLink.setOnClickListener(btnListener);
 
         return view;
     }
@@ -56,10 +54,6 @@ public class EntranceFragment extends Fragment {
 
         public void onClick(View v)
         {
-
-            String email_input_string = email_input.getText().toString();
-            String password_input_string = password_input.getText().toString();
-
 
             interview interview = (interview) getActivity();
             interview.setLoginVar(false);

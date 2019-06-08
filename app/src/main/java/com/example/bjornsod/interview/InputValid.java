@@ -1,4 +1,4 @@
 package com.example.bjornsod.interview;
 
-public class DatabaseHelper {
+public class InputValid {
 }

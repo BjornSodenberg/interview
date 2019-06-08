@@ -27,7 +27,6 @@
         android:textSize="25dp" />
 
     <EditText
-        android:id="@+id/user_name"
         android:layout_width="match_parent"
         android:layout_height="100px"
         android:layout_alignParentStart="true"
@@ -35,13 +34,14 @@
         android:layout_marginStart="40dp"
         android:layout_marginTop="400px"
         android:layout_marginEnd="40dp"
+        android:hint="Name"
+        android:textColorHint="#9FA8DA"
         android:background="@drawable/edittext_bg"
-        android:hint="User name"
-        android:inputType="text"
-        android:textColor="#9FA8DA" />
+        android:textColor="#9FA8DA"
+        android:id="@+id/editTextName"
+        />
 
     <EditText
-        android:id="@+id/email_reg"
         android:layout_width="match_parent"
         android:layout_height="100px"
         android:layout_alignParentStart="true"
@@ -50,12 +50,14 @@
         android:layout_marginTop="550px"
         android:layout_marginEnd="40dp"
         android:background="@drawable/edittext_bg"
-        android:hint="email"
+        android:hint="Email"
+        android:textColorHint="#9FA8DA"
         android:inputType="textEmailAddress"
-        android:textColor="#9FA8DA" />
+        android:textColor="#9FA8DA"
+        android:id="@+id/editTextEmail"
+        />
 
     <EditText
-        android:id="@+id/password_reg"
         android:layout_width="match_parent"
         android:layout_height="100px"
         android:layout_alignParentStart="true"
@@ -64,12 +66,14 @@
         android:layout_marginTop="700px"
         android:layout_marginEnd="40dp"
         android:background="@drawable/edittext_bg"
-        android:hint="password"
-        android:inputType="textPassword"
-        android:textColor="#9FA8DA" />
+        android:hint="Password"
+        android:textColorHint="#9FA8DA"
+        android:inputType="textEmailAddress"
+        android:textColor="#9FA8DA"
+        android:id="@+id/editTextPassword"
+        />
 
     <EditText
-        android:id="@+id/password_conf"
         android:layout_width="match_parent"
         android:layout_height="100px"
         android:layout_alignParentStart="true"
@@ -78,9 +82,13 @@
         android:layout_marginTop="850px"
         android:layout_marginEnd="40dp"
         android:background="@drawable/edittext_bg"
-        android:hint="confirm password"
-        android:inputType="textPassword"
-        android:textColor="#9FA8DA" />
+        android:hint="Confirm Password"
+        android:textColorHint="#9FA8DA"
+        android:inputType="textEmailAddress"
+        android:textColor="#9FA8DA"
+        android:id="@+id/editTextConfirmPassword"
+        />
+
 
     <Button
         android:layout_width="match_parent"
