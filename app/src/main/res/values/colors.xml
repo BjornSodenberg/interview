@@ -5,4 +5,7 @@
     <color name="colorAccent">#D81B60</color>
     <color name="mblack">#212121</color>
     <color name="background">#e1bee7</color>
+    <color name="mlblue">#9FA8DA</color>
+    <color name="interview_home">#1E88E5</color>
+    <color name="profile">#1565C0</color>
 </resources>

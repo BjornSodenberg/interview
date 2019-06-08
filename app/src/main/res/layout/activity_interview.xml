@@ -14,15 +14,19 @@
         android:text="Interview"
         android:fontFamily="sans-serif"
         android:textSize="30dp"
-        android:background="@color/background"
-        android:textColor="@color/mblack"
+        android:background="@color/interview_home"
+        android:textColor="#ffff"
         android:gravity="center"/>
 
+
+
     <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/fragment_container"
-        ></FrameLayout>
+
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="200px"></FrameLayout>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
@@ -35,8 +39,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:itemBackground="@color/background"
-        app:itemIconTint="@color/mblack"
+        app:itemBackground="@color/interview_home"
+        app:itemIconTint="#ffff"
         app:labelVisibilityMode="unlabeled"
         app:menu="@menu/navigation" />
 

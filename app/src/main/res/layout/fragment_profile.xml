@@ -1,5 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100px"
+        android:text="user_name"
+        android:fontFamily="sans-serif"
+        android:textSize="20dp"
+        android:background="@color/profile"
+        android:textColor="#fff"
+        android:gravity="center"
+        android:id="@+id/username"
+        />
+
+    <Button
+        android:id="@+id/exit_btn"
+        android:layout_width="250px"
+        android:layout_height="100px"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+
+        android:background="@color/profile"
+        android:text="Exit"
+        android:textColor="#fff" />
+
+
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/profile_image"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/sa"
+        app:civ_border_color="#FF000000"
+        app:civ_border_width="0dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/profile_image"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="16dp"
+        android:text="0"
+        android:id="@+id/ansCount"
+        android:textColor="@color/mblack"
+        android:textSize="25dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/profile_image"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="111dp"
+        android:layout_marginTop="52dp"
+        android:text="ответы"
+        android:textColor="@color/mblack"
+        android:textSize="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/profile_image"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="225dp"
+        android:layout_marginTop="17dp"
+        android:text="0"
+        android:id="@+id/askCount"
+        android:textColor="@color/mblack"
+        android:textSize="25dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/profile_image"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="189dp"
+        android:layout_marginTop="52dp"
+        android:text="вопросы"
+        android:textColor="@color/mblack"
+        android:textSize="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/profile_image"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="307dp"
+        android:layout_marginTop="17dp"
+        android:text="0"
+        android:id="@+id/ratingCount"
+        android:textColor="@color/mblack"
+        android:textSize="25dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/profile_image"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="277dp"
+        android:layout_marginTop="52dp"
+        android:text="рейтинг"
+        android:textColor="@color/mblack"
+        android:textSize="20dp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recyclerview_id"
+        android:layout_marginTop="140dp"
+        >
+
+    </android.support.v7.widget.RecyclerView>
+
 
 </RelativeLayout>

@@ -1,24 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.bjornsod.interview.interview"
+    android:background="#fff"
+    android:padding="0dp">
 
-    <TextView
+
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="100px"
-        android:text="user_name"
-        android:fontFamily="sans-serif"
-        android:textSize="20dp"
-        android:background="@color/background"
-        android:textColor="@color/mblack"
-        android:gravity="center"
-        android:id="@+id/username"
-        />
+        android:layout_height="match_parent"
+        android:id="@+id/recyclerview_id"
+        >
 
+    </android.support.v7.widget.RecyclerView>
 
-
-
-
-</RelativeLayout>
+</LinearLayout>
