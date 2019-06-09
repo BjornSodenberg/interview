@@ -39,11 +39,11 @@ public class interview extends AppCompatActivity {
                     selectedFragment = new NotifFragment();
                     break;
                 case R.id.navigation_profile:
-                    if(nonLogin){
-                        selectedFragment = new EntranceFragment();
-                    }else {
-                        selectedFragment = new ProfileFragment();
-                    }
+                    selectedFragment = new EntranceFragment();
+
+//                    else {
+//                        selectedFragment = new ProfileFragment();
+//                    }
 
 
                     break;
@@ -63,13 +63,13 @@ public class interview extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView)findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-        loadText();
+//        loadText();
 
     }
 
     protected void onDestroy() {
         super.onDestroy();
-        saveText();
+//        saveText();
     }
 
     public void setLoginVar( boolean var ) {
@@ -88,19 +88,19 @@ public class interview extends AppCompatActivity {
         return email_reg;
     }
 
-    void saveText() {
-        sPref = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor ed = sPref.edit();
-        ed.putString(SAVED_VAR, String.valueOf(nonLogin));
-        ed.commit();
-        Toast.makeText(this, "Text saved", Toast.LENGTH_SHORT).show();
-    }
-
-    void loadText() {
-        sPref = getPreferences(MODE_PRIVATE);
-        String savedText = sPref.getString(SAVED_VAR, "");
-        nonLogin = Boolean.valueOf(savedText);
-        Toast.makeText(this, "Text loaded", Toast.LENGTH_SHORT).show();
-    }
+//    void saveText() {
+//        sPref = getPreferences(MODE_PRIVATE);
+//        SharedPreferences.Editor ed = sPref.edit();
+//        ed.putString(SAVED_VAR, String.valueOf(nonLogin));
+//        ed.commit();
+//        Toast.makeText(this, "Text saved", Toast.LENGTH_SHORT).show();
+//    }
+//
+//    void loadText() {
+//        sPref = getPreferences(MODE_PRIVATE);
+//        String savedText = sPref.getString(SAVED_VAR, "");
+//        nonLogin = Boolean.valueOf(savedText);
+//        Toast.makeText(this, "Text loaded", Toast.LENGTH_SHORT).show();
+//    }
 
 }

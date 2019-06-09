@@ -29,7 +29,7 @@
         android:background="@drawable/edittext_bg"
         android:hint="Email"
         android:textColorHint="#9FA8DA"
-        android:inputType="textPassword"
+        android:inputType="textEmailAddress"
         android:textColor="#9FA8DA"
         android:id="@+id/editTextEmail"
         />
