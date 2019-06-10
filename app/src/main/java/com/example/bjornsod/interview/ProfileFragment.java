@@ -13,8 +13,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.content.Intent;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.ArrayList;
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -32,6 +43,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private static final int GALLERY_REQUEST = 1;
     private Uri imageUri;
+
+    private StorageReference storageReference;
+    private FirebaseFirestore firebaseFirestore;
 
 
 
@@ -62,10 +76,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         if(firebaseAuth.getCurrentUser() == null) {
             Fragment selectedFragment = new EntranceFragment();
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+        } else {
+
+
+
         }
 
-        FirebaseUser user = firebaseAuth.getCurrentUser();
 
+        FirebaseUser user = firebaseAuth.getCurrentUser();
         String userNameFromEmail = user.getEmail().split("@",2)[0];
 
         UsrName.setText(userNameFromEmail);
@@ -96,9 +114,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
         }
         if(v==selectImage){
-            Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
-            galleryIntent.setType("image/*");
-            startActivityForResult(galleryIntent, GALLERY_REQUEST);
+            Intent setupAccount = new Intent(getActivity(),AccountSetup.class);
+            startActivity(setupAccount);
         }
     }
 
