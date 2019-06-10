@@ -10,6 +10,7 @@ import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -20,14 +21,19 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -43,6 +49,9 @@ public class AccountSetup extends AppCompatActivity {
 
     private StorageReference storageReference;
     private FirebaseAuth firebaseAuth;
+    private FirebaseFirestore firebaseFirestore;
+
+    private Uri downloadUrl;
 
     private ProgressBar setupProgress;
 
@@ -53,6 +62,7 @@ public class AccountSetup extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
 
         setupName = findViewById(R.id.username);
@@ -63,33 +73,72 @@ public class AccountSetup extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String user_name = setupName.getText().toString();
+                final String user_name = setupName.getText().toString();
+
                 if(!TextUtils.isEmpty(user_name) && mainImageURI != null){
-                    String user_id = firebaseAuth.getCurrentUser().getUid();
+                    final String user_id = firebaseAuth.getCurrentUser().getUid();
                     setupProgress.setVisibility(View.VISIBLE);
+
 
                     StorageReference imagePath = storageReference.child("profile_images").child(user_id+".jpg");
                     imagePath.putFile(mainImageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-
                             if(task.isSuccessful()){
-                                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+
+//                                get image Url
+                                storageReference.child("profile_images").child(user_id+".jpg").getDownloadUrl()
+                                        .addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
-                                        Uri downloadUUrl = uri;
 
+                                        downloadUrl = uri;
+
+                                        Map<String,String> userMap = new HashMap<>();
+                                        userMap.put("name",user_name);
+                                        userMap.put("image",downloadUrl.toString());
+
+
+                                        firebaseFirestore.collection("Users").document(user_id).set(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if(task.isSuccessful()){
+
+                                                    Toast.makeText(AccountSetup.this, "The user settings are updated",Toast.LENGTH_SHORT).show();
+                                                    finish();
+
+                                                }else {
+                                                    String error = task.getException().getMessage();
+                                                    Toast.makeText(AccountSetup.this, "FIRESTORE Error: "+error,Toast.LENGTH_SHORT).show();
+                                                }
+
+                                                setupProgress.setVisibility(View.INVISIBLE);
+                                            }
+                                        });
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        String error = e.getMessage();
+                                        Toast.makeText(AccountSetup.this, "download url Error: "+error,Toast.LENGTH_SHORT).show();
                                     }
                                 });
-                                Toast.makeText(AccountSetup.this, "The image uploaded",Toast.LENGTH_SHORT).show();
+//                                ------------
+//                                get database
+
+
+
+//                                ------------
+
 
                             } else {
                                 String error = task.getException().getMessage();
-                                Toast.makeText(AccountSetup.this, "Error: "+error,Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AccountSetup.this, "IMAGE Error: "+error,Toast.LENGTH_SHORT).show();
+                                setupProgress.setVisibility(View.INVISIBLE);
 
                             }
 
-                            setupProgress.setVisibility(View.INVISIBLE);
+
 
                         }
                     });
@@ -109,14 +158,24 @@ public class AccountSetup extends AppCompatActivity {
                         Toast.makeText(AccountSetup.this,"Permission Denied", Toast.LENGTH_SHORT).show();
                         ActivityCompat.requestPermissions(AccountSetup.this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},1);
                     } else {
-                        CropImage.activity()
-                                .setGuidelines(CropImageView.Guidelines.ON)
-                                .setAspectRatio(1,1)
-                                .start(AccountSetup.this);
+                        
+                        BringImagePicker();
+
                     }
+                } else {
+
+                    BringImagePicker();
+
                 }
             }
         });
+    }
+
+    private void BringImagePicker() {
+        CropImage.activity()
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setAspectRatio(1,1)
+                .start(AccountSetup.this);
     }
 
     @Override

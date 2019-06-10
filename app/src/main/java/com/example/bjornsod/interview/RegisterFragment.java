@@ -99,11 +99,12 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Toast.makeText(getActivity(),getString(R.string.success_message),Toast.LENGTH_SHORT).show();
-//                            Fragment selectedFragment = new ProfileFragment();
-//
-//                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+
                             Intent setupAccount = new Intent(getActivity(),AccountSetup.class);
                             startActivity(setupAccount);
+
+                            Fragment selectedFragment = new ProfileFragment();
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
 
                             progressDialog.cancel();
                         } else {
