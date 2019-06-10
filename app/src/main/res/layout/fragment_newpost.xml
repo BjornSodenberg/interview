@@ -5,6 +5,59 @@
     android:background="#fff">
 
 
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:src="@mipmap/add_btn"
+        android:id="@+id/imageButton"/>
 
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+
+        android:background="@drawable/input_outline"
+        android:ems="10"
+        android:layout_below="@id/editText3"
+        android:inputType="textMultiLine"
+        android:padding="15dp"
+        android:hint="Enter description"
+        android:textColorHint="@color/mlblue"/>
+
+    <EditText
+        android:id="@+id/editText3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="224dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@id/imageButton"
+        android:background="@drawable/input_outline"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:padding="15dp"
+        android:hint="Enter title"
+
+        android:textColorHint="@color/mlblue"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editText2"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/matbut_inverse"
+        android:text="Publicate"
+        android:textColor="#fff"
+        android:id="@+id/pubPost"
+        />
 
 </RelativeLayout>
