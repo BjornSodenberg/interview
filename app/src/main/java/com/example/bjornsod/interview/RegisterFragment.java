@@ -2,6 +2,7 @@ package com.example.bjornsod.interview;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -98,9 +99,12 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Toast.makeText(getActivity(),getString(R.string.success_message),Toast.LENGTH_SHORT).show();
-                            Fragment selectedFragment = new ProfileFragment();
+//                            Fragment selectedFragment = new ProfileFragment();
+//
+//                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+                            Intent setupAccount = new Intent(getActivity(),AccountSetup.class);
+                            startActivity(setupAccount);
 
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
                             progressDialog.cancel();
                         } else {
                             // If sign in fails, display a message to the user.
