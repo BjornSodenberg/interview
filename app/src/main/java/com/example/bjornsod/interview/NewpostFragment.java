@@ -105,77 +105,92 @@ public class NewpostFragment extends Fragment {
                         @Override
                         public void onComplete(@NonNull final Task<UploadTask.TaskSnapshot> task) {
 
-                            final String downloadUri = task.getResult().getStorage().getDownloadUrl().toString();
+                            storageReference.child("post_images").child(randomName+".jpg").getDownloadUrl()
+                                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
 
-                            if(task.isSuccessful()){
-                                File newImageFile = new File(postImageUri.getPath());
-                                try {
-                                    compressedImageFile = new Compressor(getActivity())
-                                            .setMaxHeight(100)
-                                            .setMaxWidth(100)
-                                            .setQuality(2)
-                                            .compressToBitmap(newImageFile);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
+                                        String downloadUri;
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            downloadUri = uri.toString();
 
-                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                compressedImageFile.compress(Bitmap.CompressFormat.JPEG,100,baos);
-                                byte[] thumbData = baos.toByteArray();
+                                            if(task.isSuccessful()){
+                                                File newImageFile = new File(postImageUri.getPath());
+                                                try {
+                                                    compressedImageFile = new Compressor(getActivity())
+                                                            .setMaxHeight(100)
+                                                            .setMaxWidth(100)
+                                                            .setQuality(2)
+                                                            .compressToBitmap(newImageFile);
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
 
-                                UploadTask uploadTask = storageReference.child("post_images/thumbs")
-                                        .child(UUID.randomUUID().toString()+".jpg").putBytes(thumbData);
+                                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                                compressedImageFile.compress(Bitmap.CompressFormat.JPEG,100,baos);
+                                                byte[] thumbData = baos.toByteArray();
 
-                                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                UploadTask uploadTask = storageReference.child("post_images/thumbs")
+                                                        .child(randomName+".jpg").putBytes(thumbData);
 
-                                        String downloadThumbUri = taskSnapshot.getStorage().getDownloadUrl().toString();
-
-                                        Map<String,Object> postMap = new HashMap<>();
-                                        postMap.put("image_url",downloadUri);
-                                        postMap.put("thumb",downloadThumbUri);
-                                        postMap.put("title",title);
-                                        postMap.put("desc",desc);
-                                        postMap.put("user_id",user_id);
-                                        postMap.put("timestamp",FieldValue.serverTimestamp());
-
-                                        firebaseFirestore.collection("Posts").add(postMap)
-                                                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                                     @Override
-                                                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                                                        if(task.isSuccessful()){
+                                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                                                            Toast.makeText(getActivity(),"Post was added", Toast.LENGTH_SHORT).show();
-                                                            Fragment selectedFragment = new HomeFragment();
-                                                            getActivity().getSupportFragmentManager()
-                                                                    .beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+                                                        storageReference.child("post_images/thumbs").child(randomName+".jpg").getDownloadUrl()
+                                                                .addOnSuccessListener(new OnSuccessListener<Uri>() {
 
-                                                        } else {
+                                                                    String downloadThumbUri;
+                                                                    @Override
+                                                                    public void onSuccess(Uri uri) {
+                                                                        downloadThumbUri = uri.toString();
+
+                                                                        Map<String,Object> postMap = new HashMap<>();
+                                                                        postMap.put("image_url",downloadUri);
+                                                                        postMap.put("thumb",downloadThumbUri);
+                                                                        postMap.put("title",title);
+                                                                        postMap.put("desc",desc);
+                                                                        postMap.put("user_id",user_id);
+                                                                        postMap.put("timestamp",FieldValue.serverTimestamp());
+
+                                                                        firebaseFirestore.collection("Posts").add(postMap)
+                                                                                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                                                                    @Override
+                                                                                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                                                                                        if(task.isSuccessful()){
+
+                                                                                            Toast.makeText(getActivity(),"Post was added", Toast.LENGTH_SHORT).show();
+                                                                                            Fragment selectedFragment = new HomeFragment();
+                                                                                            getActivity().getSupportFragmentManager()
+                                                                                                    .beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+
+                                                                                        } else {
 
 
-                                                        }
+                                                                                        }
 
-                                                        progressBar.setVisibility(View.INVISIBLE);
+                                                                                        progressBar.setVisibility(View.INVISIBLE);
+
+                                                                                    }
+                                                                                });
+                                                                    }
+                                                                });
+
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
 
                                                     }
                                                 });
 
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
+                                            } else {
+                                                progressBar.setVisibility(View.INVISIBLE);
 
-                                    }
-                                });
+                                            }
+                                        }
 
 
-
-
-                            } else {
-                                progressBar.setVisibility(View.INVISIBLE);
-
-                            }
+                                    });
                         }
                     });
 

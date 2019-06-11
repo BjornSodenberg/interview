@@ -57,24 +57,17 @@ public class HomeFragment extends Fragment {
                         Post post = doc.getDocument().toObject(Post.class);
                         lstPost.add(post);
 
+
+
                         recyclerViewAdapter.notifyDataSetChanged();
 
+
+                    } else {
 
                     }
                 }
             }
         });
-
-
-//        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.jessie, "Jessie", R.raw.jessie_id));
-//        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.tom, "Tom", R.raw.tom_id));
-//        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.palma, "Palma", R.raw.palma_id));
-//        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.pammi, "Pammi", R.raw.pammi_id));
-//        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.john, "John", R.raw.john_id));
-//
-//
-
-
 
         return view;
     }
