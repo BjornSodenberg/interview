@@ -102,15 +102,12 @@ public class interview extends AppCompatActivity {
         super.onStart();
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-//        if(currentUser == null){
-//
-////            Fragment selectedFragment = new EntranceFragment();
-////            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
-//            Intent setupAccount = new Intent(interview.this,AccountSetup.class);
-//            startActivity(setupAccount);
-//            finish();
-//
-//        } else {
+        if(currentUser == null){
+
+            Fragment selectedFragment = new EntranceFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+
+        } else {
 
             current_user_id = firebaseAuth.getCurrentUser().getUid();
 
@@ -139,7 +136,7 @@ public class interview extends AppCompatActivity {
                 }
             });
 
-//        }
+        }
 
     }
 

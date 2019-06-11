@@ -13,12 +13,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -28,6 +32,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public Context context;
 
     private FirebaseFirestore firebaseFirestore;
+    private FirebaseAuth firebaseAuth;
 
     public RecyclerViewAdapter(List<Post> post_list) {
         this.post_list = post_list;
@@ -41,12 +46,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         context = viewGroup.getContext();
         firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
 
         return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, int i) {
+
+        final String postId = post_list.get(i).BlogPostId;
+        final String currentUserId = firebaseAuth.getCurrentUser().getUid();
 
         String desc_data = post_list.get(i).getDesc();
         myViewHolder.setDescText(desc_data);
@@ -78,6 +87,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         String dateString = df.format("dd/MM/yyyy", millisecond).toString();
         myViewHolder.setTime(dateString);
 
+        myViewHolder.postLikeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Map<String,Object> likesMap = new HashMap<>();
+                likesMap.put("timestamp",FieldValue.serverTimestamp());
+                firebaseFirestore.collection("Posts/" + postId + "/Likes").document(currentUserId).set(likesMap);
+
+            }
+        });
+
     }
 
     @Override
@@ -95,12 +114,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         private TextView titlePost;
         private CircleImageView user_image;
 
+        private ImageView postLikeBtn;
+        private TextView postLikeCount;
+
 
 
         public MyViewHolder (View itemView) {
             super(itemView);
 
             mView = itemView;
+            postLikeBtn = mView.findViewById(R.id.postLike_id);
+
         }
 
         public void setDescText(String descText){

@@ -4,7 +4,7 @@ package com.example.bjornsod.interview;
 import java.sql.Timestamp;
 import java.util.Date;
 
-public class Post {
+public class Post extends BlogPostId {
 
     public String user_id;
     public String image_url;
