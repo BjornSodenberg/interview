@@ -114,38 +114,33 @@ public class AccountSetup extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final String user_name = setupName.getText().toString();
+                if(!TextUtils.isEmpty(user_name) && mainImageURI != null){
 
-                if (isChanged) {
-
-
-                    if(!TextUtils.isEmpty(user_name) && mainImageURI != null){
+                    if (isChanged) {
                         user_id = firebaseAuth.getCurrentUser().getUid();
                         setupProgress.setVisibility(View.VISIBLE);
 
-
                         StorageReference imagePath = storageReference.child("profile_images").child(user_id+".jpg");
                         imagePath.putFile(mainImageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                                if(task.isSuccessful()){
-                                    storeFrirestore(task,user_name);
+                                @Override
+                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                    if(task.isSuccessful()){
+                                        storeFrirestore(task,user_name);
 
-                                } else {
-                                    String error = task.getException().getMessage();
-                                    Toast.makeText(AccountSetup.this, "IMAGE Error: "+error,Toast.LENGTH_SHORT).show();
-                                    setupProgress.setVisibility(View.INVISIBLE);
+                                    } else {
+                                        String error = task.getException().getMessage();
+                                        Toast.makeText(AccountSetup.this, "IMAGE Error: "+error,Toast.LENGTH_SHORT).show();
+                                        setupProgress.setVisibility(View.INVISIBLE);
+
+                                    }
+
+
 
                                 }
-
-
-
-                            }
-                        });
-
+                            });
+                    } else {
+                        storeFrirestore(null,user_name);
                     }
-
-                } else {
-                    storeFrirestore(null,user_name);
                 }
             }
         });

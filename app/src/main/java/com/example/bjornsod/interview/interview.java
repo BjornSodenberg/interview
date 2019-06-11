@@ -1,5 +1,6 @@
 package com.example.bjornsod.interview;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,6 +11,13 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 public class interview extends AppCompatActivity {
 
     private TextView mTextMessage;
@@ -18,6 +26,11 @@ public class interview extends AppCompatActivity {
     final String SAVED_VAR = "saved_log";
 
     private String email_reg;
+
+    FirebaseFirestore firebaseFirestore;
+    FirebaseAuth firebaseAuth;
+
+    private String currentUser_id;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -59,6 +72,9 @@ public class interview extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interview);
+
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
 
         BottomNavigationView navigation = (BottomNavigationView)findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -103,4 +119,40 @@ public class interview extends AppCompatActivity {
 //        Toast.makeText(this, "Text loaded", Toast.LENGTH_SHORT).show();
 //    }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(currentUser == null) {
+            Fragment selectedFragment = new EntranceFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+        } else {
+            currentUser_id = firebaseAuth.getCurrentUser().getUid();
+            firebaseFirestore.collection("Users").document(currentUser_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if(task.isSuccessful()){
+                        if(!task.getResult().exists()){
+                            Intent setupIntent = new Intent(interview.this,AccountSetup.class);
+                            startActivity(setupIntent);
+                            finish();
+                        }
+                    } else {
+                        String errorMessage = task.getException().getMessage();
+                        Toast.makeText(interview.this,"Error: " + errorMessage,Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
+    }
 }
