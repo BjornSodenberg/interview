@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class EntranceFragment extends Fragment {
 
@@ -33,7 +35,7 @@ public class EntranceFragment extends Fragment {
     private TextView editTextEmail;
     private TextView editTextPassword;
 
-    private ProgressDialog progressDialog;
+    private ProgressBar loginProgress;
 
     private FirebaseAuth firebaseAuth;
 
@@ -46,78 +48,76 @@ public class EntranceFragment extends Fragment {
         loginButton = (Button) view.findViewById(R.id.button_login);
         RegisterLink = (TextView) view.findViewById(R.id.register_link);
 
-        loginButton.setOnClickListener(buttonLoginListener);
-        RegisterLink.setOnClickListener(btnListener);
-
         editTextEmail = (TextView) view.findViewById(R.id.editTextEmail);
         editTextPassword = (TextView) view.findViewById(R.id.editTextPassword);
 
-        progressDialog = new ProgressDialog(getActivity());
+        loginProgress = view.findViewById(R.id.loginProgress);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        if(firebaseAuth.getCurrentUser() != null){
-            Fragment selectedFragment = new ProfileFragment();
-
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
-        }
-
-        return view;
-    }
-
-    private void userLogin() {
-        String email = editTextEmail.getText().toString().trim();
-        String password = editTextPassword.getText().toString().trim();
-
-        if(TextUtils.isEmpty(email)){
-            Toast.makeText(getActivity(),getString(R.string.error_message_email),Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if(TextUtils.isEmpty(password)){
-            Toast.makeText(getActivity(),getString(R.string.error_message_password),Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        progressDialog.setMessage("Entrance User");
-        progressDialog.show();
-
-        firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+        RegisterLink.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                progressDialog.dismiss();
-                if(task.isSuccessful()){
+            public void onClick(View v) {
+                Fragment selectedFragment = new RegisterFragment();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+            }
+        });
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String loginEmail = editTextEmail.getText().toString();
+                String loginPass = editTextPassword.getText().toString();
 
-                    Fragment selectedFragment = new ProfileFragment();
+                if(!TextUtils.isEmpty(loginEmail) && !TextUtils.isEmpty(loginPass)){
+                    loginProgress.setVisibility(View.VISIBLE);
 
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
-                } else {
+                    firebaseAuth.signInWithEmailAndPassword(loginEmail, loginPass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+
+                            if(task.isSuccessful()){
+
+                                sendToMain();
+
+                            } else {
+
+                                String errorMessage = task.getException().getMessage();
+                                Toast.makeText(getActivity(), "Error : " + errorMessage, Toast.LENGTH_LONG).show();
+
+
+                            }
+
+                            loginProgress.setVisibility(View.INVISIBLE);
+
+                        }
+                    });
 
                 }
             }
         });
+
+        return view;
     }
 
-    private View.OnClickListener btnListener = new View.OnClickListener()
-    {
+    @Override
+    public void onStart() {
+        super.onStart();
 
-        public void onClick(View v)
-        {
-            Fragment selectedFragment = new RegisterFragment();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
-        }
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
-    };
+        if(currentUser != null){
 
-    private View.OnClickListener buttonLoginListener = new View.OnClickListener()
-    {
-
-        public void onClick(View v)
-        {
-
-            userLogin();
+            sendToMain();
 
         }
 
-    };
+
+    }
+
+    private void sendToMain() {
+
+        Intent mainIntent = new Intent(getActivity(), interview.class);
+        startActivity(mainIntent);
+
+    }
 }

@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,51 +22,49 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class interview extends AppCompatActivity {
 
-    private TextView mTextMessage;
-    private boolean nonLogin;
-    SharedPreferences sPref;
-    final String SAVED_VAR = "saved_log";
-
     private String email_reg;
+    private String current_user_id;
 
     FirebaseFirestore firebaseFirestore;
     FirebaseAuth firebaseAuth;
 
     private String currentUser_id;
 
+    private HomeFragment homeFragment;
+    private SearchFragment searchFragment;
+    private NewpostFragment newpostFragment;
+    private NotifFragment notifFragment;
+    private ProfileFragment profileFragment;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment selectedFragment = new HomeFragment();
+            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
             switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    selectedFragment = new HomeFragment();
-                    break;
-                case R.id.navigation_search:
-                    selectedFragment = new SearchFragment();
-                    break;
-                case R.id.navigation_newpost:
-                    selectedFragment = new NewpostFragment();
-                    break;
-                case R.id.navigation_notifications:
-                    selectedFragment = new NotifFragment();
-                    break;
-                case R.id.navigation_profile:
-                    selectedFragment = new EntranceFragment();
+                    case R.id.navigation_home:
+                        replaceFragment(homeFragment, currentFragment);
+                        return true;
+                    case R.id.navigation_search:
+                        replaceFragment(searchFragment, currentFragment);
+                        return true;
+                    case R.id.navigation_newpost:
+                        replaceFragment(newpostFragment, currentFragment);
+                        return true;
+                    case R.id.navigation_notifications:
+                        replaceFragment(notifFragment, currentFragment);
+                        return true;
+                    case R.id.navigation_profile:
+                        replaceFragment(profileFragment, currentFragment);
+                        return true;
 
-//                    else {
-//                        selectedFragment = new ProfileFragment();
-//                    }
-
-
-                    break;
+                    default:
+                        return false;
 
             }
 
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
-            return true;
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
         }
     };
 
@@ -76,77 +76,79 @@ public class interview extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
 
-        BottomNavigationView navigation = (BottomNavigationView)findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-//        loadText();
+        if(firebaseAuth.getCurrentUser() != null) {
+
+            // FRAGMENTS
+            homeFragment = new HomeFragment();
+            searchFragment = new SearchFragment();
+            newpostFragment = new NewpostFragment();
+            notifFragment = new NotifFragment();
+            profileFragment = new ProfileFragment();
+
+            initializeFragment();
+
+            BottomNavigationView navigation = findViewById(R.id.navigation);
+            navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+        } else {
+            Fragment selectedFragment = new EntranceFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+        }
 
     }
-
-    protected void onDestroy() {
-        super.onDestroy();
-//        saveText();
-    }
-
-    public void setLoginVar( boolean var ) {
-        nonLogin = var;
-    }
-
-    public boolean getLoginVar( ) {
-        return nonLogin;
-    }
-
-    public void setEmail_reg(String email_reg) {
-        this.email_reg = email_reg;
-    }
-
-    public String getEmail_reg() {
-        return email_reg;
-    }
-
-//    void saveText() {
-//        sPref = getPreferences(MODE_PRIVATE);
-//        SharedPreferences.Editor ed = sPref.edit();
-//        ed.putString(SAVED_VAR, String.valueOf(nonLogin));
-//        ed.commit();
-//        Toast.makeText(this, "Text saved", Toast.LENGTH_SHORT).show();
-//    }
 //
-//    void loadText() {
-//        sPref = getPreferences(MODE_PRIVATE);
-//        String savedText = sPref.getString(SAVED_VAR, "");
-//        nonLogin = Boolean.valueOf(savedText);
-//        Toast.makeText(this, "Text loaded", Toast.LENGTH_SHORT).show();
-//    }
-
-
     @Override
     protected void onStart() {
         super.onStart();
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if(currentUser == null) {
-            Fragment selectedFragment = new EntranceFragment();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
-        } else {
-            currentUser_id = firebaseAuth.getCurrentUser().getUid();
-            firebaseFirestore.collection("Users").document(currentUser_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//        if(currentUser == null){
+//
+////            Fragment selectedFragment = new EntranceFragment();
+////            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+//            Intent setupAccount = new Intent(interview.this,AccountSetup.class);
+//            startActivity(setupAccount);
+//            finish();
+//
+//        } else {
+
+            current_user_id = firebaseAuth.getCurrentUser().getUid();
+
+            firebaseFirestore.collection("Users").document(current_user_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
                     if(task.isSuccessful()){
+
                         if(!task.getResult().exists()){
-                            Intent setupIntent = new Intent(interview.this,AccountSetup.class);
+
+                            Intent setupIntent = new Intent(interview.this, AccountSetup.class);
                             startActivity(setupIntent);
                             finish();
+
                         }
+
                     } else {
+
                         String errorMessage = task.getException().getMessage();
-                        Toast.makeText(interview.this,"Error: " + errorMessage,Toast.LENGTH_SHORT).show();
+                        Toast.makeText(interview.this, "Error : " + errorMessage, Toast.LENGTH_LONG).show();
+
 
                     }
+
                 }
             });
-        }
+
+//        }
+
+    }
+
+    private void sendToLogin() {
+
+        Fragment selectedFragment = new EntranceFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+        finish();
+
     }
 
     @Override
@@ -154,5 +156,78 @@ public class interview extends AppCompatActivity {
         for (Fragment fragment : getSupportFragmentManager().getFragments()) {
             fragment.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    private void initializeFragment(){
+
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+
+        fragmentTransaction.add(R.id.fragment_container, homeFragment);
+        fragmentTransaction.add(R.id.fragment_container, searchFragment);
+        fragmentTransaction.add(R.id.fragment_container, notifFragment);
+        fragmentTransaction.add(R.id.fragment_container, newpostFragment);
+        fragmentTransaction.add(R.id.fragment_container, profileFragment);
+
+        fragmentTransaction.hide(searchFragment);
+        fragmentTransaction.hide(notifFragment);
+        fragmentTransaction.hide(newpostFragment);
+        fragmentTransaction.hide(profileFragment);
+
+        fragmentTransaction.commit();
+
+    }
+
+    private void replaceFragment(Fragment fragment, Fragment currentFragment){
+
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        if(fragment == homeFragment){
+
+            fragmentTransaction.hide(searchFragment);
+            fragmentTransaction.hide(notifFragment);
+            fragmentTransaction.hide(newpostFragment);
+            fragmentTransaction.hide(profileFragment);
+
+        }
+
+        if(fragment == profileFragment){
+
+            fragmentTransaction.hide(searchFragment);
+            fragmentTransaction.hide(notifFragment);
+            fragmentTransaction.hide(newpostFragment);
+            fragmentTransaction.hide(homeFragment);
+
+        }
+
+        if(fragment == notifFragment){
+
+            fragmentTransaction.hide(searchFragment);
+            fragmentTransaction.hide(homeFragment);
+            fragmentTransaction.hide(newpostFragment);
+            fragmentTransaction.hide(profileFragment);
+
+        }
+
+        if(fragment == newpostFragment){
+
+            fragmentTransaction.hide(searchFragment);
+            fragmentTransaction.hide(homeFragment);
+            fragmentTransaction.hide(notifFragment);
+            fragmentTransaction.hide(profileFragment);
+
+        }
+
+        if(fragment == searchFragment){
+
+            fragmentTransaction.hide(notifFragment);
+            fragmentTransaction.hide(homeFragment);
+            fragmentTransaction.hide(newpostFragment);
+            fragmentTransaction.hide(profileFragment);
+
+        }
+        fragmentTransaction.show(fragment);
+
+        //fragmentTransaction.replace(R.id.main_container, fragment);
+        fragmentTransaction.commit();
+
     }
 }

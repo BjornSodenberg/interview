@@ -59,7 +59,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
 
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        final View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         selectImage = (CircleImageView) view.findViewById(R.id.profile_image) ;
         selectImage.setOnClickListener(this);
@@ -72,6 +72,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         rating_cnt = view.findViewById(R.id.ratingCount);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
         if(firebaseAuth.getCurrentUser() == null) {
             Fragment selectedFragment = new EntranceFragment();
@@ -83,10 +84,31 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         }
 
 
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        String userNameFromEmail = user.getEmail().split("@",2)[0];
+        String user_id = firebaseAuth.getCurrentUser().getUid();
+        firebaseFirestore.collection("Users").document(user_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    String username = task.getResult().getString("name");
+                    String userImage = task.getResult().getString("image");
 
-        UsrName.setText(userNameFromEmail);
+                    selectImage = view.findViewById(R.id.profile_image);
+                    UsrName = view.findViewById(R.id.username);
+
+                    UsrName.setText(username);
+
+                    RequestOptions placeHolderOptions = new RequestOptions();
+                    placeHolderOptions.placeholder(R.drawable.defprofileimage);
+
+                    Glide.with(getActivity()).applyDefaultRequestOptions(placeHolderOptions).load(userImage).into(selectImage);
+                } else {
+
+                }
+            }
+        });
+//        String userNameFromEmail = user.getEmail().split("@",2)[0];
+
+//        UsrName.setText(userNameFromEmail);
 
 
         editButton = (Button)view.findViewById(R.id.exit_btn);
@@ -129,6 +151,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         }
     }
+
+
 
 }
 
