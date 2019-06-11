@@ -36,7 +36,7 @@ public class RecyclerViewAdapter_min extends RecyclerView.Adapter<RecyclerViewAd
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
 
-        myViewHolder.img_post_thumbnail.setImageResource(mData.get(i).getThumbnail());
+//        myViewHolder.img_post_thumbnail.setImageResource(mData.get(i).getThumbnail());
     }
 
     @Override
@@ -52,7 +52,7 @@ public class RecyclerViewAdapter_min extends RecyclerView.Adapter<RecyclerViewAd
         public MyViewHolder (View itemView) {
             super(itemView);
 
-            img_post_thumbnail = (ImageView) itemView.findViewById(R.id.post_img_id);
+//            img_post_thumbnail = (ImageView) itemView.findViewById(R.id.post_img_id);
 
         }
     }

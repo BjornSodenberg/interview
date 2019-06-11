@@ -24,22 +24,22 @@ public class SearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
         lstPost = new ArrayList<>();
-        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.jessie));
-        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.tom));
-        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.palma));
-        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.pammi));
-        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.john));
-        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.jessie));
-        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.tom));
-        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.palma));
-        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.pammi));
-        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.john));
-
-
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_id);
-        RecyclerViewAdapter_min recyclerViewAdapter = new RecyclerViewAdapter_min(getActivity(),lstPost);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),3));
-        recyclerView.setAdapter(recyclerViewAdapter);
+//        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.jessie));
+//        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.tom));
+//        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.palma));
+//        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.pammi));
+//        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.john));
+//        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.jessie));
+//        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.tom));
+//        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.palma));
+//        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.pammi));
+//        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.john));
+//
+//
+//        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_id);
+//        RecyclerViewAdapter_min recyclerViewAdapter = new RecyclerViewAdapter_min(getActivity(),lstPost);
+//        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),3));
+//        recyclerView.setAdapter(recyclerViewAdapter);
 
         return view;
     }

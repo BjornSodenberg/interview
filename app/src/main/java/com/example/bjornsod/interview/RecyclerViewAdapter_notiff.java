@@ -36,8 +36,8 @@ public class RecyclerViewAdapter_notiff extends RecyclerView.Adapter<RecyclerVie
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
 
-        myViewHolder.profile_img.setImageResource(mData.get(i).getThumbnail_profile());
-        myViewHolder.notiff.setText(mData.get(i).getUsername() + " " + mData.get(i).getDescription());
+//        myViewHolder.profile_img.setImageResource(mData.get(i).getThumbnail_profile());
+//        myViewHolder.notiff.setText(mData.get(i).getUsername() + " " + mData.get(i).getDescription());
     }
 
     @Override
@@ -54,8 +54,8 @@ public class RecyclerViewAdapter_notiff extends RecyclerView.Adapter<RecyclerVie
         public MyViewHolder (View itemView) {
             super(itemView);
 
-            profile_img = (ImageView) itemView.findViewById(R.id.profile_img_id);
-            notiff = (TextView) itemView.findViewById(R.id.notification_id);
+//            profile_img = (ImageView) itemView.findViewById(R.id.profile_img_id);
+//            notiff = (TextView) itemView.findViewById(R.id.notification_id);
 
         }
     }

@@ -13,22 +13,17 @@ import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
 
-    private Context mContext;
-    private List<Post> mData;
+    public List<Post> post_list;
 
-    public RecyclerViewAdapter(Context mContext, List<Post> mData) {
-        this.mContext = mContext;
-        this.mData = mData;
+    public RecyclerViewAdapter(List<Post> post_list) {
+        this.post_list = post_list;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
-        View view;
-        LayoutInflater layoutInflater =  LayoutInflater.from(mContext);
-
-        view = layoutInflater.inflate(R.layout.cardview_item_post, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.post_list_item, viewGroup,false);
 
         return new MyViewHolder(view);
     }
@@ -36,29 +31,30 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
 
-        myViewHolder.img_post_thumbnail.setImageResource(mData.get(i).getThumbnail());
-        myViewHolder.img_profile_thumbnail.setImageResource(mData.get(i).getThumbnail_profile());
-        myViewHolder.username.setText(mData.get(i).getUsername());
+        String desc_data = post_list.get(i).getDesc();
+        myViewHolder.setDescText(desc_data);
+
     }
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return post_list.size();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView img_post_thumbnail;
-        ImageView img_profile_thumbnail;
-        TextView username;
+        private TextView descView;
+        private View mView;
 
         public MyViewHolder (View itemView) {
             super(itemView);
 
-            img_post_thumbnail = (ImageView) itemView.findViewById(R.id.post_img_id);
-            img_profile_thumbnail = (ImageView) itemView.findViewById(R.id.profile_img_id);
-            username = (TextView) itemView.findViewById(R.id.username_id);
+            mView = itemView;
+        }
 
+        public void setDescText(String descText){
+            descView = mView.findViewById(R.id.blogDesc_id);
+            descView.setText(descText);
         }
     }
 }

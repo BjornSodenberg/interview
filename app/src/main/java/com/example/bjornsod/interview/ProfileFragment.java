@@ -94,13 +94,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         editButton.setOnClickListener(this);
 
         lstPost = new ArrayList<>();
-        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.jessie));
+//        lstPost.add(new Post("firstPost", "all", "nothing", R.raw.jessie));
         int countPosts = lstPost.size();
         questions.setText(String.valueOf(countPosts));
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_id);
-        RecyclerViewAdapter_min recyclerViewAdapter = new RecyclerViewAdapter_min(getActivity(),lstPost);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),3));
-        recyclerView.setAdapter(recyclerViewAdapter);
+//        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_id);
+//        RecyclerViewAdapter_min recyclerViewAdapter = new RecyclerViewAdapter_min(getActivity(),lstPost);
+//        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),3));
+//        recyclerView.setAdapter(recyclerViewAdapter);
 
         return view;
 

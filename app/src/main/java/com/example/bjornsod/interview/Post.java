@@ -1,69 +1,67 @@
 package com.example.bjornsod.interview;
 
+import java.sql.Timestamp;
+
 public class Post {
 
-    private String title;
-    private String category;
-    private String description;
-    private int thumbnail;
-
-    private String username;
-    private int thumbnail_profile;
-
+    public String user_id;
+    public String image_url;
+    public String desc;
+    public String title;
+    public String image_thumb;
 
 
 
     public Post() {
     }
 
-    public Post(String title, String category, String description, int thumbnail, String username, int thumbnail_profile) {
+    public Post(String user_id, String image_url, String desc, String title, String image_thumb, Timestamp timestamp) {
+        this.user_id = user_id;
+        this.image_url = image_url;
+        this.desc = desc;
         this.title = title;
-        this.category = category;
-        this.description = description;
-        this.thumbnail = thumbnail;
-        this.username = username;
-        this.thumbnail_profile = thumbnail_profile;
+        this.image_thumb = image_thumb;
     }
 
-    public Post(String title, String category, String description, int thumbnail) {
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public void setTitle(String title) {
         this.title = title;
-        this.category = category;
-        this.description = description;
-        this.thumbnail = thumbnail;
+    }
+
+    public void setImage_thumb(String image_thumb) {
+        this.image_thumb = image_thumb;
+    }
+
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public String getDesc() {
+        return desc;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public String getCategory() {
-        return category;
+    public String getImage_thumb() {
+        return image_thumb;
     }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public int getThumbnail() {
-        return thumbnail;
-    }
-
-    public String getUsername() { return username; }
-
-    public int getThumbnail_profile() { return thumbnail_profile; }
-
-
-    public void setTitle(String title) { this.title = title; }
-
-    public void setCategory(String category) { this.category = category; }
-
-    public void setDescription(String description) { this.description = description; }
-
-    public void setThumbnail(int thumbnail) { this.thumbnail = thumbnail; }
-
-    public void setUsername(String username) { this.username = username; }
-
-    public void setThumbnail_profile(int thumbnail_profile) { this.thumbnail_profile = thumbnail_profile; }
-
 
 }

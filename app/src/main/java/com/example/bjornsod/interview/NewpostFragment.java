@@ -124,7 +124,7 @@ public class NewpostFragment extends Fragment {
                                 byte[] thumbData = baos.toByteArray();
 
                                 UploadTask uploadTask = storageReference.child("post_images/thumbs")
-                                        .child(random()+".jpg").putBytes(thumbData);
+                                        .child(UUID.randomUUID().toString()+".jpg").putBytes(thumbData);
 
                                 uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                     @Override
@@ -203,16 +203,5 @@ public class NewpostFragment extends Fragment {
         }
     }
 
-    public static String random() {
-        Random generator = new Random();
-        StringBuilder randomStringBuilder = new StringBuilder();
-        int randomLength = generator.nextInt(MAX_LENGTH);
-        char tempChar;
-        for (int i = 0; i < randomLength; i++){
-            tempChar = (char) (generator.nextInt(96) + 32);
-            randomStringBuilder.append(tempChar);
-        }
-        return randomStringBuilder.toString();
-    }
 
 }
