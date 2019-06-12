@@ -159,9 +159,8 @@ public class NewpostFragment extends Fragment {
                                                                                         if(task.isSuccessful()){
 
                                                                                             Toast.makeText(getActivity(),"Post was added", Toast.LENGTH_SHORT).show();
-                                                                                            Fragment selectedFragment = new HomeFragment();
-                                                                                            getActivity().getSupportFragmentManager()
-                                                                                                    .beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+                                                                                            Intent mainIntent = new Intent(getActivity(), interview.class);
+                                                                                            startActivity(mainIntent);
 
                                                                                         } else {
 

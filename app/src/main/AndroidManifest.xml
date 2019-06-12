@@ -31,6 +31,7 @@
         <activity android:name=".LoginActivity" /> <!-- optional (needed if default theme has no action bar) -->
         <activity android:name=".RegistrationActivity" /> <!-- optional (needed if default theme has no action bar) -->
         <activity android:name=".CommentsActivity" />
+        <activity android:name=".ProfileActivityUser" />
     </application>
 
 </manifest>

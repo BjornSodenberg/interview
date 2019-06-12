@@ -24,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +41,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
+
+    private long millisecond;
 
     public RecyclerViewAdapter(List<Post> post_list) {
         this.post_list = post_list;
@@ -75,7 +78,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         String image_url = post_list.get(i).getImage_url();
         myViewHolder.setPostImage(image_url);
 
-        String user_id = post_list.get(i).getUser_id();
+        final String user_id = post_list.get(i).getUser_id();
         firebaseFirestore.collection("Users").document(user_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -83,7 +86,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     String username = task.getResult().getString("name");
                     String userImage = task.getResult().getString("image");
 
-                    myViewHolder.setUserData(username,userImage);
+                    myViewHolder.setUserData(username,userImage,user_id);
                 } else {
 
                 }
@@ -92,10 +95,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 //        myViewHolder.setUsernameText(user_id);
 
         try {
+            millisecond = post_list.get(i).getTimestamp().getTime();
 
-            long millisecond = post_list.get(i).getTimestamp().getTime();
-            android.text.format.DateFormat df = new android.text.format.DateFormat();
-            String dateString = df.format("dd/MM/yyyy", millisecond).toString();
+            SimpleDateFormat sfd = new SimpleDateFormat("dd/MM/yyyy");
+            String dateString = sfd.format(new Date(millisecond)).toString();
+
+//            long millisecond = post_list.get(i).getTimestamp().getTime();
+//            android.text.format.DateFormat df = new android.text.format.DateFormat();
+//            String dateString = df.format("dd/MM/yyyy", millisecond).toString();
             myViewHolder.setTime(dateString);
         } catch (Exception e){
             Toast.makeText(context, "Exception : " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -172,6 +179,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
 
+
+
+
     }
 
     @Override
@@ -203,6 +213,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             postLikeBtn = mView.findViewById(R.id.postLike_id);
             CommentBtn = mView.findViewById(R.id.comment_icon);
 
+
         }
 
         public void setDescText(String descText){
@@ -233,11 +244,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
 
         public void setTime(String date){
+
             postDate = mView.findViewById(R.id.blogDate_id);
             postDate.setText(date);
         }
 
-        public void setUserData(String name, String image){
+        public void setUserData(String name, String image,final String user_id){
             user_image = mView.findViewById(R.id.blogUserImage_id);
             username = mView.findViewById(R.id.blogUserName_id);
 
@@ -247,6 +259,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             placeHolderOptions.placeholder(R.drawable.defprofileimage);
 
             Glide.with(context).applyDefaultRequestOptions(placeHolderOptions).load(image).into(user_image);
+
+            user_image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent profileIntent = new Intent(context, ProfileActivityUser.class);
+                    profileIntent.putExtra("user_id", user_id);
+                    context.startActivity(profileIntent);
+                }
+            });
 
         }
 
