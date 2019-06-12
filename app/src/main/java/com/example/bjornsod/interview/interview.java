@@ -104,8 +104,10 @@ public class interview extends AppCompatActivity {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if(currentUser == null){
 
-            Fragment selectedFragment = new EntranceFragment();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+            sendToLogin();
+//
+//            Fragment selectedFragment = new EntranceFragment();
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
 
         } else {
 
@@ -142,8 +144,11 @@ public class interview extends AppCompatActivity {
 
     private void sendToLogin() {
 
-        Fragment selectedFragment = new EntranceFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+        Intent loginIntent = new Intent(interview.this,LoginActivity.class);
+        startActivity(loginIntent);
+
+//        Fragment selectedFragment = new EntranceFragment();
+//        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
         finish();
 
     }

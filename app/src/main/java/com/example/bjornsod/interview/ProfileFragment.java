@@ -102,6 +102,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
                     Glide.with(getActivity()).applyDefaultRequestOptions(placeHolderOptions).load(userImage).into(selectImage);
                 } else {
+                    Toast.makeText(getActivity(), "Wrong load", Toast.LENGTH_LONG).show();
 
                 }
             }

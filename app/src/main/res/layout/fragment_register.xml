@@ -9,23 +9,27 @@
         android:layout_width="match_parent"
         android:layout_height="150px"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/regProgress"
+
         android:layout_marginStart="0dp"
         android:fontFamily="sans-serif"
         android:gravity="center"
-        android:text="Register"
+        android:text="Registration"
         android:textColor="#757575"
-        android:textSize="25dp" />
+        android:textSize="25dp"
+        android:id="@+id/title_register"/>
 
 
     <EditText
         android:id="@+id/editTextEmail"
         android:layout_width="match_parent"
-        android:layout_height="100px"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title_register"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="200px"
         android:layout_marginEnd="40dp"
+        android:layout_marginTop="20dp"
+        android:padding="15dp"
         android:background="@drawable/edittext_bg"
         android:hint="Email"
         android:inputType="textEmailAddress"
@@ -33,36 +37,76 @@
         android:textColorHint="#9FA8DA" />
 
     <EditText
+        android:id="@+id/editTextPassword"
         android:layout_width="match_parent"
-        android:layout_height="100px"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextEmail"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="350px"
+        android:layout_marginTop="20dp"
+        android:padding="15dp"
         android:layout_marginEnd="40dp"
         android:background="@drawable/edittext_bg"
         android:hint="Password"
-        android:textColorHint="#9FA8DA"
         android:inputType="textPassword"
         android:textColor="#9FA8DA"
-        android:id="@+id/editTextPassword"
-        />
+        android:textColorHint="#9FA8DA" />
 
+    <EditText
+        android:id="@+id/editTextConfPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextPassword"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="20dp"
+        android:padding="15dp"
+        android:layout_marginEnd="40dp"
+        android:background="@drawable/edittext_bg"
+        android:hint="Confirm Password"
+        android:inputType="textPassword"
+        android:textColor="#9FA8DA"
+        android:textColorHint="#9FA8DA" />
 
 
     <Button
+        android:id="@+id/button_reg"
         android:layout_width="match_parent"
-        android:layout_height="100px"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp"
-        android:layout_alignParentTop="true"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextConfPassword"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="500px"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="20dp"
+        android:padding="15dp"
+        android:layout_marginEnd="40dp"
         android:background="@drawable/matbut"
         android:text="Register"
-        android:textColor="#9FA8DA"
-        android:id="@+id/button_reg"
-        />
+        android:textColor="#9FA8DA" />
+
+    <TextView
+        android:id="@+id/register_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/button_reg"
+        android:layout_marginTop="20dp"
+        android:clickable="true"
+        android:onClick="onClick"
+        android:text="Already have an account?"
+        android:textColor="#1565C0" />
+
+    <ProgressBar
+        android:id="@+id/regProgress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:indeterminate="true"
+        android:visibility="invisible" />
 
 
 </RelativeLayout>

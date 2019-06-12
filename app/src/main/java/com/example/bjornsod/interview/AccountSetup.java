@@ -3,6 +3,7 @@ package com.example.bjornsod.interview;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,10 +36,14 @@ import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import id.zelory.compressor.Compressor;
 
 import static android.Manifest.*;
 
@@ -61,6 +66,8 @@ public class AccountSetup extends AppCompatActivity {
 //    private Uri downloadUrl;
 
     private ProgressBar setupProgress;
+
+    private Bitmap compressedImageFile;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -116,28 +123,49 @@ public class AccountSetup extends AppCompatActivity {
                 final String user_name = setupName.getText().toString();
                 if(!TextUtils.isEmpty(user_name) && mainImageURI != null){
 
+                    setupProgress.setVisibility(View.VISIBLE);
+
                     if (isChanged) {
                         user_id = firebaseAuth.getCurrentUser().getUid();
-                        setupProgress.setVisibility(View.VISIBLE);
 
-                        StorageReference imagePath = storageReference.child("profile_images").child(user_id+".jpg");
-                        imagePath.putFile(mainImageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                                    if(task.isSuccessful()){
-                                        storeFrirestore(task,user_name);
+                        File newImageFile = new File(mainImageURI.getPath());
+                        try {
+                            compressedImageFile = new Compressor(AccountSetup.this)
+                                    .setMaxHeight(125)
+                                    .setMaxWidth(125)
+                                    .setQuality(50)
+                                    .compressToBitmap(newImageFile);
 
-                                    } else {
-                                        String error = task.getException().getMessage();
-                                        Toast.makeText(AccountSetup.this, "IMAGE Error: "+error,Toast.LENGTH_SHORT).show();
-                                        setupProgress.setVisibility(View.INVISIBLE);
+                        } catch (Exception e){
+                            e.printStackTrace();
 
-                                    }
+                        }
 
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        compressedImageFile.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                        byte[] thumbData = baos.toByteArray();
 
+                        UploadTask image_path = storageReference.child("profile_images").child(user_id + ".jpg").putBytes(thumbData);
+
+//                        StorageReference imagePath = storageReference.child("profile_images").child(user_id+".jpg");
+
+                        image_path.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+
+                                if (task.isSuccessful()) {
+                                    storeFrirestore(task, user_name);
+
+                                } else {
+
+                                    String error = task.getException().getMessage();
+                                    Toast.makeText(AccountSetup.this, "(IMAGE Error) : " + error, Toast.LENGTH_LONG).show();
+
+                                    setupProgress.setVisibility(View.INVISIBLE);
 
                                 }
-                            });
+                            }
+                        });
                     } else {
                         storeFrirestore(null,user_name);
                     }
@@ -194,6 +222,8 @@ public class AccountSetup extends AppCompatActivity {
                                 if(task.isSuccessful()){
 
                                     Toast.makeText(AccountSetup.this, "The user settings are updated",Toast.LENGTH_SHORT).show();
+                                    Intent mainIntent = new Intent(AccountSetup.this,interview.class);
+                                    startActivity(mainIntent);
                                     finish();
 
                                 }else {
@@ -239,4 +269,3 @@ public class AccountSetup extends AppCompatActivity {
     }
 }
 
-//TODO: add Fragment selectedFragment = new ProfileFragment(); getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();

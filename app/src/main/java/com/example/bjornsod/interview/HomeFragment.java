@@ -81,33 +81,36 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
 
-                    if (!queryDocumentSnapshots.isEmpty()) {
-                        if(isFirstPageFirstLoad){
-                            lastVisible = queryDocumentSnapshots.getDocuments().get(queryDocumentSnapshots.size() - 1);
-                            lstPost.clear();
-                        }
+                    if (e == null) {
 
-
-                        for (DocumentChange doc : queryDocumentSnapshots.getDocumentChanges()) {
-                            if (doc.getType() == DocumentChange.Type.ADDED) {
-
-
-                                String postId = doc.getDocument().getId();
-
-                                Post post = doc.getDocument().toObject(Post.class).withId(postId);
-
-                                if(isFirstPageFirstLoad){
-                                    lstPost.add(post);
-                                } else {
-                                    lstPost.add(0,post);
-                                }
-
-                                recyclerViewAdapter.notifyDataSetChanged();
-
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            if (isFirstPageFirstLoad) {
+                                lastVisible = queryDocumentSnapshots.getDocuments().get(queryDocumentSnapshots.size() - 1);
+                                lstPost.clear();
                             }
-                        }
 
-                        isFirstPageFirstLoad = false;
+
+                            for (DocumentChange doc : queryDocumentSnapshots.getDocumentChanges()) {
+                                if (doc.getType() == DocumentChange.Type.ADDED) {
+
+
+                                    String postId = doc.getDocument().getId();
+
+                                    Post post = doc.getDocument().toObject(Post.class).withId(postId);
+
+                                    if (isFirstPageFirstLoad) {
+                                        lstPost.add(post);
+                                    } else {
+                                        lstPost.add(0, post);
+                                    }
+
+                                    recyclerViewAdapter.notifyDataSetChanged();
+
+                                }
+                            }
+
+                            isFirstPageFirstLoad = false;
+                        }
                     }
                 }
             });
