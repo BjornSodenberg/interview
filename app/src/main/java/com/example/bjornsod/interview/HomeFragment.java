@@ -81,7 +81,7 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
 
-                    if (e == null) {
+                    if(firebaseAuth.getCurrentUser() != null) {
 
                         if (!queryDocumentSnapshots.isEmpty()) {
                             if (isFirstPageFirstLoad) {
@@ -112,7 +112,8 @@ public class HomeFragment extends Fragment {
                             isFirstPageFirstLoad = false;
                         }
                     }
-                }
+                    }
+
             });
         }
 

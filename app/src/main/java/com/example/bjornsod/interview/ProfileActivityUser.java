@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,7 +56,7 @@ public class ProfileActivityUser extends AppCompatActivity {
         userId = getIntent().getStringExtra("user_id");
 
         profileImage = findViewById(R.id.profileImage_id);
-        profileName = findViewById(R.id.username);
+        profileName = findViewById(R.id.notiff_user_id);
 
         quesCount = findViewById(R.id.questCount_id);
         ansCount = findViewById(R.id.ansCount_id);

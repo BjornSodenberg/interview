@@ -4,10 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,29 +14,32 @@ import android.widget.EditText;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchFragment extends Fragment {
+
+public class SearchFragment extends Fragment{
 
     private List<Post> lstPost;
+
     private RecyclerView lstPost_view;
     private RecyclerViewAdapter recyclerViewAdapter;
-    private Boolean isFirstPageFirstLoad = true;
 
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
 
+    private DocumentSnapshot lastVisible;
+    private Boolean isFirstPageFirstLoad = true;
+
     private EditText searchText;
-    private Button searchBtn;
+    private Button searchButton;
 
 
     @Nullable
@@ -48,10 +49,7 @@ public class SearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
         searchText = view.findViewById(R.id.search);
-        searchBtn = view.findViewById(R.id.search_button);
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        searchButton = view.findViewById(R.id.search_button);
 
         lstPost = new ArrayList<>();
         lstPost_view = view.findViewById(R.id.recyclerview_id);
@@ -63,62 +61,64 @@ public class SearchFragment extends Fragment {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        searchBtn.setOnClickListener(new View.OnClickListener() {
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(firebaseAuth.getCurrentUser() != null) {
 
-                String searchTextString = searchText.getText().toString();
-                if(!TextUtils.isEmpty(searchTextString)){
-                    if(firebaseAuth.getCurrentUser() != null) {
+                    String searchTextString = searchText.getText().toString();
 
-                        firebaseFirestore = FirebaseFirestore.getInstance();
+                    firebaseFirestore = FirebaseFirestore.getInstance();
+
+                    Query firstQuery = firebaseFirestore.collection("Posts")
+                            .orderBy("title")
+                            .startAt(searchTextString)
+                            .endAt(searchTextString+"\uf8ff");
+
+                    firstQuery.addSnapshotListener(getActivity(),new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
+
+                            if (!queryDocumentSnapshots.isEmpty()) {
+                                if (isFirstPageFirstLoad) {
+//                            lastVisible = queryDocumentSnapshots.getDocuments().get(queryDocumentSnapshots.size() - 1);
+                                    lstPost.clear();
+                                }
 
 
-                        Query firstQuery = firebaseFirestore.collection("Posts")
-                                
-                                .whereEqualTo("title", searchTextString);
+                                for (DocumentChange doc : queryDocumentSnapshots.getDocumentChanges()) {
+                                    if (doc.getType() == DocumentChange.Type.ADDED) {
 
-                        firstQuery.addSnapshotListener(getActivity(),new EventListener<QuerySnapshot>() {
-                            @Override
-                            public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
 
-                                if (e == null) {
+                                        String postId = doc.getDocument().getId();
 
-                                    if (!queryDocumentSnapshots.isEmpty()) {
+                                        Post post = doc.getDocument().toObject(Post.class).withId(postId);
 
-                                        for (DocumentChange doc : queryDocumentSnapshots.getDocumentChanges()) {
-                                            if (doc.getType() == DocumentChange.Type.ADDED) {
-
-                                                String postId = doc.getDocument().getId();
-
-                                                Post post = doc.getDocument().toObject(Post.class).withId(postId);
-
-                                                if (isFirstPageFirstLoad) {
-                                                    lstPost.add(post);
-                                                } else {
-                                                    lstPost.add(0, post);
-                                                }
-
-                                                recyclerViewAdapter.notifyDataSetChanged();
-                                            }
+                                        if (isFirstPageFirstLoad) {
+                                            lstPost.add(post);
+                                        } else {
+                                            lstPost.add(0, post);
                                         }
 
-                                        isFirstPageFirstLoad = false;
+                                        recyclerViewAdapter.notifyDataSetChanged();
+
                                     }
                                 }
+
+                                isFirstPageFirstLoad = false;
                             }
-                        });
-                    }
+                        }
+
+                    });
                 }
-
-
             }
         });
 
 
-
-
-
         return view;
+
     }
+
+
 }

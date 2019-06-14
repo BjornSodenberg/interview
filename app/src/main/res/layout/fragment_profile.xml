@@ -14,7 +14,7 @@
         android:background="@color/profile"
         android:textColor="#fff"
         android:gravity="center"
-        android:id="@+id/username"
+        android:id="@+id/notiff_user_id"
         />
 
     <Button

@@ -15,7 +15,7 @@
         android:background="@color/profile"
         android:textColor="#fff"
         android:gravity="center"
-        android:id="@+id/username"
+        android:id="@+id/notiff_user_id"
         />
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -26,7 +26,7 @@
         android:layout_marginTop="8dp"
         android:src="@drawable/defprofileimage"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username" />
+        app:layout_constraintTop_toBottomOf="@+id/notiff_user_id" />
 
     <TextView
         android:id="@+id/questCount_id"
@@ -37,7 +37,7 @@
         android:text="0"
         android:textSize="25dp"
         app:layout_constraintStart_toEndOf="@+id/profileImage_id"
-        app:layout_constraintTop_toBottomOf="@+id/username" />
+        app:layout_constraintTop_toBottomOf="@+id/notiff_user_id" />
 
     <TextView
         android:id="@+id/textView5"
@@ -59,7 +59,7 @@
         android:text="0"
         android:textSize="25dp"
         app:layout_constraintStart_toEndOf="@+id/questCount_id"
-        app:layout_constraintTop_toBottomOf="@+id/username" />
+        app:layout_constraintTop_toBottomOf="@+id/notiff_user_id" />
 
     <TextView
         android:id="@+id/textView7"
@@ -81,7 +81,7 @@
         android:text="0"
         android:textSize="25dp"
         app:layout_constraintStart_toEndOf="@+id/ansCount_id"
-        app:layout_constraintTop_toBottomOf="@+id/username" />
+        app:layout_constraintTop_toBottomOf="@+id/notiff_user_id" />
 
     <TextView
         android:layout_width="wrap_content"

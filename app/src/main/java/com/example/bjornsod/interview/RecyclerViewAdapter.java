@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +26,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -41,8 +43,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
-
-    private long millisecond;
 
     public RecyclerViewAdapter(List<Post> post_list) {
         this.post_list = post_list;
@@ -95,19 +95,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 //        myViewHolder.setUsernameText(user_id);
 
         try {
-            millisecond = post_list.get(i).getTimestamp().getTime();
-
-            SimpleDateFormat sfd = new SimpleDateFormat("dd/MM/yyyy");
-            String dateString = sfd.format(new Date(millisecond)).toString();
-
-//            long millisecond = post_list.get(i).getTimestamp().getTime();
-//            android.text.format.DateFormat df = new android.text.format.DateFormat();
-//            String dateString = df.format("dd/MM/yyyy", millisecond).toString();
+            long millisecond = post_list.get(i).getTimestamp().getTime();
+            android.text.format.DateFormat df = new android.text.format.DateFormat();
+            String dateString = df.format("dd/MM/yyyy", millisecond).toString();
             myViewHolder.setTime(dateString);
-        } catch (Exception e){
-            Toast.makeText(context, "Exception : " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
 
+        } catch (Exception e){
+//            Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
 
 
         firebaseFirestore.collection("Posts/" + postId + "/Likes").addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -144,22 +139,40 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View v) {
 
-                firebaseFirestore.collection("Posts/" + postId + "/Likes").document(currentUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(firebaseAuth.getCurrentUser() != null) {
 
-                        if (!task.getResult().exists()) {
-                            Map<String,Object> likesMap = new HashMap<>();
-                            likesMap.put("timestamp",FieldValue.serverTimestamp());
-                            firebaseFirestore.collection("Posts/" + postId + "/Likes").document(currentUserId).set(likesMap);
-                        } else {
-                            firebaseFirestore.collection("Posts/" + postId + "/Likes").document(currentUserId).delete();
+                    firebaseFirestore.collection("Posts/" + postId + "/Likes").document(currentUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                            if (!task.getResult().exists()) {
+                                Map<String, Object> likesMap = new HashMap<>();
+                                likesMap.put("timestamp", FieldValue.serverTimestamp());
+                                firebaseFirestore.collection("Posts/" + postId + "/Likes").document(currentUserId).set(likesMap);
+
+                                //            firebaseFirestore.collection("Posts").document(postId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                //                @Override
+                                //                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                                //
+                                //                    String user_uid = documentSnapshot.getString("user_id");
+                                //                    firebaseFirestore.collection("Notifications").document(user_uid).set(notifMap);
+                                //                }
+                                //            });
+
+                                firebaseFirestore.collection("Posts").document(postId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                                        String user_uid = documentSnapshot.getString("user_id");
+                                        NotificationsMaker notificationsMaker = new NotificationsMaker(postId, currentUserId, user_uid, "Like your post");
+                                    }
+                                });
+                            } else {
+                                firebaseFirestore.collection("Posts/" + postId + "/Likes").document(currentUserId).delete();
+                            }
+
                         }
-
-                    }
-                });
-
-
+                    });
+                }
 
             }
         });
@@ -176,11 +189,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             }
         });
-
-
-
-
-
 
     }
 
@@ -276,4 +284,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             postLikeCount.setText(count + " Likes");
         }
     }
+
 }

@@ -79,9 +79,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="Blog Post Date"
+                android:textColor="#000"
+                android:visibility="invisible"
                 app:layout_constraintStart_toEndOf="@+id/blogUserImage_id"
-                app:layout_constraintTop_toBottomOf="@+id/blogUserName_id"
-                android:textColor="#000"/>
+                app:layout_constraintTop_toBottomOf="@+id/blogUserName_id" />
 
             <ImageView
                 android:id="@+id/blogImage_id"

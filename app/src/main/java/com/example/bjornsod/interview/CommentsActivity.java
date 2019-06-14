@@ -1,5 +1,6 @@
 package com.example.bjornsod.interview;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -119,6 +120,8 @@ public class CommentsActivity extends AppCompatActivity {
                         } else {
 
                             comment_field.setText("");
+//                            NotificationsMaker notificationsMaker = new NotificationsMaker(blog_post_id,current_user_id,"Comment your post");
+//                            notificationsMaker.sendNotification();
 
                         }
 
