@@ -44,16 +44,6 @@ public class NotificationsMaker {
             notifMap.put("desc", desc);
 
 
-//            firebaseFirestore.collection("Posts").document(postId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-//                @Override
-//                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-//
-//                    String user_uid = documentSnapshot.getString("user_id");
-//                    firebaseFirestore.collection("Notifications").document(user_uid).set(notifMap);
-//                }
-//            });
-
-
             firebaseFirestore.collection("Notifications").add(notifMap);
         }
     }

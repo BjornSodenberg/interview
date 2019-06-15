@@ -2,7 +2,7 @@ package com.example.bjornsod.interview;
 
 import java.util.Date;
 
-public class Comments extends BlogPostId {
+public class Comments extends BlogPostId{
 
     private String message, user_id;
     private Date timestamp;
@@ -17,6 +17,7 @@ public class Comments extends BlogPostId {
         this.timestamp = timestamp;
         this.image_url = image_url;
     }
+
 
     public String getMessage() {
         return message;

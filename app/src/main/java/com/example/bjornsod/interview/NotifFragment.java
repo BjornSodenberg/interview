@@ -1,5 +1,6 @@
 package com.example.bjornsod.interview;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,9 +14,16 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -30,17 +38,13 @@ import java.util.List;
 
 public class NotifFragment extends Fragment {
 
-    private List<Notif_post> lstNotif;
-    private RecyclerView lstNotif_view;
+    private List<Notif_post> lstPost;
+
+    private RecyclerView lstPost_view;
     private NotificationRecyclerViewAdapter recyclerViewAdapter;
-    private Boolean isFirstPageFirstLoad = true;
-    private DocumentSnapshot lastVisible;
 
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
-
-    private ProgressBar progressBar;
-    private String recipentId;
 
     @Nullable
     @Override
@@ -48,52 +52,37 @@ public class NotifFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_notif, container, false);
 
-        progressBar = view.findViewById(R.id.notif_progressBar_id);
+        lstPost = new ArrayList<>();
+        lstPost_view = view.findViewById(R.id.recyclerview_id);
 
-        lstNotif = new ArrayList<>();
-
-        lstNotif_view = view.findViewById(R.id.recyclerview_id);
-
-        recyclerViewAdapter = new NotificationRecyclerViewAdapter(lstNotif);
-        lstNotif_view.setLayoutManager(new LinearLayoutManager(getActivity()));
-        lstNotif_view.setAdapter(recyclerViewAdapter);
-        lstNotif_view.setHasFixedSize(true);
+        recyclerViewAdapter = new NotificationRecyclerViewAdapter(lstPost);
+        lstPost_view.setLayoutManager(new LinearLayoutManager(getActivity()));
+        lstPost_view.setAdapter(recyclerViewAdapter);
+        lstPost_view.setHasFixedSize(true);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
 
-        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseFirestore.collection("Notifications").whereEqualTo("recipientId",firebaseAuth.getCurrentUser().getUid())
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    for(DocumentSnapshot documentSnapshot : task.getResult().getDocuments()){
+                        String desc = documentSnapshot.getString("desc");
+                        String postId = documentSnapshot.getString("postId");
+                        String recipientId = documentSnapshot.getString("recipientId");
+                        String userId = documentSnapshot.getString("userId");
 
-        if (firebaseAuth.getCurrentUser() != null) {
-
-            firebaseFirestore = FirebaseFirestore.getInstance();
-
-
-            Query first_Query = firebaseFirestore.collection("Notifications")
-                    .whereEqualTo("recipientId", firebaseAuth.getCurrentUser().getUid())
-                    .orderBy("postId", Query.Direction.DESCENDING);
-
-            first_Query.addSnapshotListener(new EventListener<QuerySnapshot>() {
-                @Override
-                public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                    if( e == null){
-                        if(!queryDocumentSnapshots.isEmpty()){
-                            for(DocumentChange doc: queryDocumentSnapshots.getDocumentChanges()){
-                                if(doc.getType() == DocumentChange.Type.ADDED){
-                                    Notif_post notif_post = doc.getDocument().toObject(Notif_post.class);
-                                    lstNotif.add(notif_post);
-                                    recyclerViewAdapter.notifyDataSetChanged();
-                                }
-                            }
-                        }
+                        lstPost.add(new Notif_post(desc,postId,recipientId,userId));
                     }
-
+                    recyclerViewAdapter.notifyDataSetChanged();
                 }
-            });
+            }
+        });
 
 
-        }
         return view;
     }
 

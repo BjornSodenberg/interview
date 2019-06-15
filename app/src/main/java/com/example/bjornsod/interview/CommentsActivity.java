@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,6 +28,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Nullable;
 
 public class CommentsActivity extends AppCompatActivity {
 
@@ -120,8 +123,13 @@ public class CommentsActivity extends AppCompatActivity {
                         } else {
 
                             comment_field.setText("");
-//                            NotificationsMaker notificationsMaker = new NotificationsMaker(blog_post_id,current_user_id,"Comment your post");
-//                            notificationsMaker.sendNotification();
+                            firebaseFirestore.collection("Posts").document(blog_post_id).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                @Override
+                                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                                    String user_uid = documentSnapshot.getString("user_id");
+                                    NotificationsMaker notificationsMaker = new NotificationsMaker(blog_post_id, current_user_id, user_uid, "Comment your post");
+                                }
+                            });
 
                         }
 

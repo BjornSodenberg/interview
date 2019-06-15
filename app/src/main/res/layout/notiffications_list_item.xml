@@ -22,6 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
+        android:textSize="16sp"
         android:text="Username"
         android:textColor="#000"
         android:textStyle="bold"
@@ -29,13 +30,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:textColor="#000"
         android:id="@+id/notiff_desc_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="descriprion"
-        android:textSize="10sp"
+        android:textColor="#000"
+        android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@+id/noriff_usrimage_id"
         app:layout_constraintTop_toBottomOf="@+id/notiff_user_id" />
 

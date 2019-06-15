@@ -72,18 +72,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         selectImage = (CircleImageView) view.findViewById(R.id.profile_image) ;
         selectImage.setOnClickListener(this);
 
-        UsrName = view.findViewById(R.id.notiff_user_id);
-
-
-        answers = view.findViewById(R.id.ansCount);
-        questions = view.findViewById(R.id.askCount);
-        rating_cnt = view.findViewById(R.id.ratingCount);
-
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         editButton = view.findViewById(R.id.exit_btn);
         editButton.setOnClickListener(this);
+
+        questions = view.findViewById(R.id.askCount);
 
 //      информация о пользователе
         if(firebaseAuth.getCurrentUser() != null){
@@ -95,8 +90,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                         String username = task.getResult().getString("name");
                         String userImage = task.getResult().getString("image");
 
+
                         selectImage = view.findViewById(R.id.profile_image);
                         UsrName = view.findViewById(R.id.notiff_user_id);
+                        rating_cnt = view.findViewById(R.id.ratingCount);
+
+
 
                         UsrName.setText(username);
 
@@ -111,8 +110,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 }
             });
         }
-
-
 
 
 

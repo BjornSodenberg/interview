@@ -10,7 +10,14 @@ public class Notif_post extends BlogPostId {
     public Notif_post() {
     }
 
-    public Notif_post(String postId, String userId,String recipientId, String desc) {
+//    public Notif_post(String postId, String userId,String recipientId, String desc) {
+//        this.description = desc;
+//        this.user_id = userId;
+//        this.post_id = postId;
+//        this.recipientId = recipientId;
+//    }
+
+    public Notif_post(String desc, String postId, String recipientId, String userId) {
         this.description = desc;
         this.user_id = userId;
         this.post_id = postId;

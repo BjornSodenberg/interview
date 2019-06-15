@@ -34,7 +34,7 @@
         android:layout_height="80dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="40dp"
         android:src="@drawable/sa"
         app:civ_border_color="#FF000000"
@@ -43,71 +43,50 @@
         />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/profile_image"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="140dp"
-        android:layout_marginTop="16dp"
-        android:text="0"
-        android:id="@+id/ansCount"
-        android:textColor="@color/mblack"
-        android:textSize="25dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/profile_image"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="111dp"
-        android:layout_marginTop="52dp"
-        android:text="ответы"
-        android:textColor="@color/mblack"
-        android:textSize="20dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/profile_image"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="225dp"
-        android:layout_marginTop="17dp"
-        android:text="0"
         android:id="@+id/askCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/notiff_user_id"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="17dp"
+        android:layout_toEndOf="@+id/profile_image"
+        android:text="0"
         android:textColor="@color/mblack"
         android:textSize="25dp" />
 
     <TextView
+        android:id="@+id/quest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/profile_image"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="189dp"
-        android:layout_marginTop="52dp"
-        android:text="вопросы"
+        android:layout_below="@+id/askCount"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@+id/profile_image"
+        android:text="Вопросы"
         android:textColor="@color/mblack"
         android:textSize="20dp" />
 
     <TextView
+        android:id="@+id/ratingCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/profile_image"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="307dp"
+        android:layout_below="@+id/notiff_user_id"
+        android:layout_marginStart="70dp"
         android:layout_marginTop="17dp"
+        android:layout_toEndOf="@+id/askCount"
         android:text="0"
-        android:id="@+id/ratingCount"
         android:textColor="@color/mblack"
         android:textSize="25dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/profile_image"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="277dp"
-        android:layout_marginTop="52dp"
-        android:text="рейтинг"
+
+        android:layout_below="@+id/ratingCount"
+        android:layout_marginStart="111dp"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@+id/profile_image"
+        android:text="Рейтинг"
         android:textColor="@color/mblack"
         android:textSize="20dp" />
 

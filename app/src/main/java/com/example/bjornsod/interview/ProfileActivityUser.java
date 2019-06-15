@@ -59,7 +59,7 @@ public class ProfileActivityUser extends AppCompatActivity {
         profileName = findViewById(R.id.notiff_user_id);
 
         quesCount = findViewById(R.id.questCount_id);
-        ansCount = findViewById(R.id.ansCount_id);
+//        ansCount = findViewById(R.id.ansCount_id);
         ratingCount = findViewById(R.id.ratingCount_id);
 
 

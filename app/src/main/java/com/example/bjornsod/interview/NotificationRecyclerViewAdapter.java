@@ -28,14 +28,14 @@ import javax.annotation.Nullable;
 
 public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<NotificationRecyclerViewAdapter.NotifViewHolder>{
 
-    public Context context;
-    public List<Notif_post> post_list;
+    public Context contextT;
+    public List<Notif_post> notifList;
 
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
 
-    public NotificationRecyclerViewAdapter(List<Notif_post> post_list) {
-        this.post_list = post_list;
+    public NotificationRecyclerViewAdapter(List<Notif_post> notifList) {
+        this.notifList = notifList;
     }
 
     @NonNull
@@ -44,10 +44,10 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
 
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.notiffications_list_item, viewGroup, false);
 
-        context = viewGroup.getContext();
+        contextT = viewGroup.getContext();
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
-        return new NotificationRecyclerViewAdapter.NotifViewHolder(view);
+        return new NotifViewHolder(view);
     }
 
     @Override
@@ -55,10 +55,10 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
 
         notifViewHolder.setIsRecyclable(false);
 
-        String desc_data = post_list.get(i).getDescription();
+        String desc_data = notifList.get(i).getDescription();
         notifViewHolder.setDescText(desc_data);
 
-        final String user_id = post_list.get(i).getUser_id();
+        final String user_id = notifList.get(i).getUser_id();
 
         if(user_id != null){
             firebaseFirestore.collection("Users").document(user_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -81,7 +81,7 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
 
     @Override
     public int getItemCount() {
-        return post_list.size();
+        return notifList.size();
     }
 
     public class NotifViewHolder extends RecyclerView.ViewHolder {
@@ -108,7 +108,7 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
             RequestOptions placeHolderOptions = new RequestOptions();
             placeHolderOptions.placeholder(R.drawable.defprofileimage);
 
-            Glide.with(context).applyDefaultRequestOptions(placeHolderOptions).load(image).into(userImg);
+            Glide.with(contextT).applyDefaultRequestOptions(placeHolderOptions).load(image).into(userImg);
 
         }
 
