@@ -56,6 +56,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private Boolean is_FirstPageFirstLoad = true;
     private DocumentSnapshot lastVisible;
 
+    private int ratingCnt = 0;
+
 
     public ProfileFragment() {
     }
@@ -111,6 +113,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             });
         }
 
+        rating_cnt = view.findViewById(R.id.ratingCount);
+
+
+
+//      set rating
+        int newRating = ratingCnt;
+        String strRating = String.valueOf(newRating);
+        rating_cnt.setText(strRating);
+        ratingCnt = newRating;
 
 
 //        recycler view
@@ -201,7 +212,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-
+    public void setRating_cnt(int rating_cnt) {
+        this.ratingCnt = ratingCnt + rating_cnt;
+    }
 }
 
 //: if request.auth == null

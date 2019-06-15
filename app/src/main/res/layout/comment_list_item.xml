@@ -25,9 +25,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="Username"
+        android:textColor="#000"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/comment_image"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textColor="#000"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/comment_message"
@@ -38,6 +39,30 @@
         app:layout_constraintStart_toEndOf="@+id/comment_image"
         app:layout_constraintTop_toBottomOf="@+id/comment_username"
         android:textColor="#000"/>
+
+    <ImageView
+        android:id="@+id/likeBtn_id"
+        android:layout_width="19dp"
+        android:layout_height="19dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@mipmap/action_like_gray" />
+
+    <TextView
+        android:id="@+id/countLikes_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="0 Likes"
+        android:textColor="#000"
+        app:layout_constraintEnd_toStartOf="@+id/likeBtn_id"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>

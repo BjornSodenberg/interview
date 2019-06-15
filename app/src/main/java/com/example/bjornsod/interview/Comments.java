@@ -8,6 +8,7 @@ public class Comments extends BlogPostId{
     private Date timestamp;
     public String image_url;
 
+
     public Comments() {
     }
 

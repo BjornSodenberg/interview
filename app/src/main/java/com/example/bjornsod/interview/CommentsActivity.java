@@ -88,7 +88,8 @@ public class CommentsActivity extends AppCompatActivity {
                                     if (doc.getType() == DocumentChange.Type.ADDED) {
 
                                         String commentId = doc.getDocument().getId();
-                                        Comments comments = doc.getDocument().toObject(Comments.class);
+                                        String fullPath = "Posts/" + blog_post_id + "/Comments/" + commentId;
+                                        Comments comments = doc.getDocument().toObject(Comments.class).withId(fullPath);
                                         commentsList.add(comments);
                                         commentsRecyclerAdapter.notifyDataSetChanged();
                                     }
